@@ -1,48 +1,54 @@
 # NOTE: This code copy-pasted directly from Flux/layers/basic.jl
 
 """
-    Dense(in::Integer, out::Integer, σ = identity)
+    Dense(in::Integer, out::Integer)
 
-Create a traditional `Dense` layer with parameters `W` and `b`.
+Create a traditional `Dense` layer with parameters `W` and `b`. Also ω_0
 
-    y = σ.(W * x .+ b)
+    y = sin.(ω_0 * W * x .+ b)
 
 The input `x` must be a vector of length `in`, or a batch of vectors represented
 as an `in × N` matrix. The out `y` will be a vector or batch of length `out`.
 
 # Examples
-```jldoctest; setup = :(using Random; Random.seed!(0))
-julia> d = Dense(5, 2)
-Dense(5, 2)
+```jldoctest; setup = :(using Random; Random.seed!(0)); d = Dense(5, 2)
+julia> d = SIREN.Dense(5, 2)
+SIREN.Dense(5, 2, ω_0=30)
 
 julia> d(rand(5))
-2-element Array{Float32,1}:
-  -0.16210233
-   0.12311903```
+2-element Array{Float64,1}:
+ -0.19062824191630165
+  0.14516176156652455```
 """
 struct Dense{F,S,T}
   W::S
   b::T
-  σ::F
+  ω_0::F
 end
 
-Dense(W, b) = Dense(W, b, identity)
+function Dense(in::Integer, out::Integer;
+               ω_0 = 30, is_first = false)
 
-function Dense(in::Integer, out::Integer, σ = identity;
-               initW = glorot_uniform, initb = zeros)
-  return Dense(initW(out, in), initb(out), σ)
+    W = uniform(out, in)
+    if is_first
+        W ./= in
+    else
+        W .*= sqrt(6/in) / ω_0
+    end
+
+    return Dense(W, zeros(out), ω_0)
 end
 
-@functor Dense
+# @functor Dense
 
 function (a::Dense)(x::AbstractArray)
-  W, b, σ = a.W, a.b, a.σ
-  σ.(W*x .+ b)
+  W, b, ω_0 = a.W, a.b, a.ω_0
+  sin.(ω_0 * W * x .+ b)
 end
 
 function Base.show(io::IO, l::Dense)
-  print(io, "Dense(", size(l.W, 2), ", ", size(l.W, 1))
-  l.σ == identity || print(io, ", ", l.σ)
+  print(io, "SIREN.Dense(", size(l.W, 2), ", ", size(l.W, 1))
+  print(io, ", ω_0=", l.ω_0)
   print(io, ")")
 end
 
