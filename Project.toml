@@ -1,0 +1,13 @@
+name = "SIREN"
+uuid = "55f218f3-6ae7-4f3b-80c1-24961d0f4d5c"
+authors = ["MacKenzie H&C"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
