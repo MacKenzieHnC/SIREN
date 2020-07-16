@@ -20,17 +20,22 @@ function test_dense()
     W = uniform(fan_out, fan_in)
     x = uniform(fan_in)
     b = uniform(fan_out)
-    ω_0 = 30
+    omega_0 = 30
 
-    d = SIREN.Dense(W, b, ω_0)
+    d = SIREN.Dense(W, b, omega_0)
 
     @test params(d)[1] == W
     @test params(d)[2] == b
 
-    @test d(x) == sin.(W * x .+ b)
+    @test d(x) == sin.(omega_0 * W * x .+ b)
+end
+
+function test_conv()
+    # TODO
 end
 
 @testset "SIREN.jl" begin
     test_uniform()
     test_dense()
+    test_conv()
 end
