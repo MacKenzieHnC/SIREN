@@ -1,5 +1,6 @@
 using Revise
 using SIREN
+using Flux
 using Test
 
 function test_uniform()
@@ -14,17 +15,20 @@ function test_uniform()
 end
 
 function test_dense()
+    fan_in = 5
+    fan_out = 3
+    W = uniform(fan_out, fan_in)
+    x = uniform(fan_in)
+    b = uniform(fan_out)
+    ω_0 = 30
+
+    d = SIREN.Dense(W, b, ω_0)
+
+    @test params(d)[1] == W
+    @test params(d)[2] == b
+
+    @test d(x) == sin.(ω_0 * W * x .+ b)
 end
-
-
-W = [1 2; 3 4]
-x = [5; 6]
-b = [7; 8]
-ω_0 = 30
-
-d = SIREN.Dense(W, b, ω_0)
-
-sin.(ω_0 * W * x + b)
 
 @testset "SIREN.jl" begin
     test_uniform()

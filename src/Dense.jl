@@ -1,11 +1,11 @@
-# NOTE: This code copy-pasted directly from Flux/layers/basic.jl
+using Flux
 
 """
     Dense(in::Integer, out::Integer)
 
 Create a traditional `Dense` layer with parameters `W` and `b`. Also ω_0
 
-    y = sin.(ω_0 * W * x .+ b)
+    y = sin.(W * x .+ b)
 
 The input `x` must be a vector of length `in`, or a batch of vectors represented
 as an `in × N` matrix. The out `y` will be a vector or batch of length `out`.
@@ -39,11 +39,11 @@ function Dense(in::Integer, out::Integer;
     return Dense(W, zeros(out), ω_0)
 end
 
-# @functor Dense
+Flux.@functor Dense (W, b,)
 
 function (a::Dense)(x::AbstractArray)
   W, b, ω_0 = a.W, a.b, a.ω_0
-  sin.(ω_0 * W * x .+ b)
+  sin.(W * x .+ b)
 end
 
 function Base.show(io::IO, l::Dense)
