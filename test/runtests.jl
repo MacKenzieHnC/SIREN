@@ -1,7 +1,6 @@
 using SIREN
 using Test
 
-
 @testset "SIREN.jl" begin
     a = []
 
