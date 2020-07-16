@@ -27,7 +27,7 @@ function test_dense()
     @test params(d)[1] == W
     @test params(d)[2] == b
 
-    @test d(x) == sin.(ω_0 * W * x .+ b)
+    @test d(x) == sin.(W * x .+ b)
 end
 
 @testset "SIREN.jl" begin

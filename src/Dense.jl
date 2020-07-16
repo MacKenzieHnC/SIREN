@@ -3,7 +3,7 @@ using Flux
 """
     Dense(in::Integer, out::Integer)
 
-Create a traditional `Dense` layer with parameters `W` and `b`. Also ω_0
+Create a traditional `Dense` layer with parameters `W` and `b`. Also omega_0
 
     y = sin.(W * x .+ b)
 
@@ -13,7 +13,7 @@ as an `in × N` matrix. The out `y` will be a vector or batch of length `out`.
 # Examples
 ```jldoctest; setup = :(using Random; Random.seed!(0)); d = Dense(5, 2)
 julia> d = SIREN.Dense(5, 2)
-SIREN.Dense(5, 2, ω_0=30)
+SIREN.Dense(5, 2, omega_0=30)
 
 julia> d(rand(5))
 2-element Array{Float64,1}:
@@ -23,32 +23,32 @@ julia> d(rand(5))
 struct Dense{F,S,T}
   W::S
   b::T
-  ω_0::F
+  omega_0::F
 end
 
 function Dense(in::Integer, out::Integer;
-               ω_0 = 30, is_first = false)
+               omega_0 = 30, is_first = false)
 
     W = uniform(out, in)
     if is_first
         W ./= in
     else
-        W .*= sqrt(6/in) / ω_0
+        W .*= sqrt(6/in) / omega_0
     end
 
-    return Dense(W, zeros(out), ω_0)
+    return Dense(W, zeros(out), omega_0)
 end
 
 Flux.@functor Dense (W, b,)
 
 function (a::Dense)(x::AbstractArray)
-  W, b, ω_0 = a.W, a.b, a.ω_0
-  sin.(W * x .+ b)
+  W, b, omega_0 = a.W, a.b, a.omega_0
+  sin.(omega_0 * W * x .+ b)
 end
 
 function Base.show(io::IO, l::Dense)
   print(io, "SIREN.Dense(", size(l.W, 2), ", ", size(l.W, 1))
-  print(io, ", ω_0=", l.ω_0)
+  print(io, ", omega_0=", l.omega_0)
   print(io, ")")
 end
 
