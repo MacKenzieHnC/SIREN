@@ -12,4 +12,4 @@ julia> SIREN.uniform(2, 3)
  0.822376   0.735768   0.0525029
 ```
 """
-uniform(dims...) = (rand(Float32, dims...) .- 0.5f0) * 2
+uniform(dims...) = (rand(Float64, dims...) .- 0.5f0) * 2

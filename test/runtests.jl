@@ -5,7 +5,6 @@ using Flux: params
 
 using Flux;
 
-
 function test_uniform()
     a = []
 
