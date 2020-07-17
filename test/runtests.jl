@@ -1,7 +1,10 @@
 using Revise
 using SIREN
-using Flux
 using Test
+using Flux: params
+
+using Flux;
+
 
 function test_uniform()
     a = []
@@ -31,7 +34,7 @@ function test_dense()
 end
 
 function test_conv()
-    # TODO
+    SIREN.Conv((3,2), 4=>5)
 end
 
 @testset "SIREN.jl" begin
