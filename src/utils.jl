@@ -13,3 +13,20 @@ julia> SIREN.uniform(2, 3)
 ```
 """
 uniform(dims...) = (rand(Float64, dims...) .- 0.5f0) * 2
+
+function SIREN_init(omega_0::Real, is_first::Bool, dims...)
+    w = uniform(dims)
+
+    fan_in = 1
+    s = size(w)
+    for i in 1:(length(s)-1)
+      fan_in *= s[i]
+    end
+    if is_first
+      w ./= fan_in
+    else
+      w .*= sqrt(6/fan_in) / omega_0
+    end
+
+    return w
+end

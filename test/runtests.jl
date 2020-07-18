@@ -3,15 +3,8 @@ using SIREN
 using Test
 using Flux: params
 
-d = SIREN.ConvTranspose((3,2), 4=>5)
-
-
-
-
-
-
-
-
+w = SIREN_init(30, false, 5, 2)
+d = SIREN.Dense(3, 2)
 
 function test_uniform()
     a = []
