@@ -1,3 +1,4 @@
+using Random
 """
     uniform(dims...)
 
@@ -13,7 +14,6 @@ julia> SIREN.uniform(2, 3)
 ```
 """
 uniform(dims...) = (rand(Float64, dims...) .- 0.5f0) * 2
-
 function SIREN_init(omega_0::Real, is_first::Bool, dims...)
     w = uniform(dims)
 
