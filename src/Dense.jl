@@ -21,9 +21,9 @@ julia> d(rand(5))
    0.12311903```
 """
 struct Dense{F,S,T}
-  omega_0::F
-  W::S
-  b::T
+    omega_0::F
+    W::S
+    b::T
 end
 
 function Dense(in::Integer, out::Integer;
@@ -31,7 +31,7 @@ function Dense(in::Integer, out::Integer;
   return Dense(omega_0, SIREN_init(omega_0, is_first, out, in), initb(out))
 end
 
-Flux.@functor Dense (W,b,)
+Flux.@functor Dense
 
 function (a::Dense)(x::AbstractArray)
   W, b, omega_0 = a.W, a.b, a.omega_0
@@ -44,6 +44,7 @@ function Base.show(io::IO, l::Dense)
   print(io, ")")
 end
 
+## FIGURE OUT WHAT THE FUCK THIS MEANS
 # Try to avoid hitting generic matmul in some simple cases
 # Base's matmul is so slow that it's worth the extra conversion to hit BLAS
 (a::Dense{<:Any,W})(x::AbstractArray{T}) where {T <: Union{Float32,Float64}, W <: AbstractArray{T}} =
@@ -51,7 +52,7 @@ end
 
 (a::Dense{<:Any,W})(x::AbstractArray{<:AbstractFloat}) where {T <: Union{Float32,Float64}, W <: AbstractArray{T}} =
   a(T.(x))
-
+##
 """
     outdims(l::Dense, isize)
 

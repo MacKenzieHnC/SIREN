@@ -3,9 +3,6 @@ using SIREN
 using Test
 using Flux: params
 
-w = SIREN_init(30, false, 5, 2)
-d = SIREN.Dense(3, 2)
-
 function test_uniform()
     a = []
 
@@ -30,12 +27,23 @@ function test_dense()
     @test params(d)[1] == W
     @test params(d)[2] == b
 
-    @test d(x) == sin.(omega_0 * W * x .+ b)
+    @test d(x) == sin.(omega_0 * (W * x .+ b))
 end
 
 function test_conv()
     SIREN.Conv((3,2), 4=>5)
 end
+
+function test_CuArrays()
+
+end
+
+
+
+
+
+
+
 
 @testset "SIREN.jl" begin
     test_uniform()
