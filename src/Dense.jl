@@ -1,24 +1,24 @@
 import Flux
 
 """
-    Dense(in::Integer, out::Integer, σ = identity)
+    Dense(in::Integer, out::Integer; omega_0 = 30, is_first = false)
 
-Create a traditional `Dense` layer with parameters `W` and `b`.
+Create a `Dense` layer with SIREN initialization, parameters `W` and `b`, and scaling factor omega_0.
 
-    y = σ.(W * x .+ b)
+    y = sin.(omega_0 *(W * x .+ b))
 
 The input `x` must be a vector of length `in`, or a batch of vectors represented
 as an `in × N` matrix. The out `y` will be a vector or batch of length `out`.
 
 # Examples
 ```jldoctest; setup = :(using Random; Random.seed!(0))
-julia> d = Dense(5, 2)
-Dense(5, 2)
+julia> d = SIREN.Dense(5, 2)
+SIREN.Dense(5, 2, omega_0=30)
 
 julia> d(rand(5))
-2-element Array{Float32,1}:
-  -0.16210233
-   0.12311903```
+2-element Array{Float64,1}:
+ -0.9926777049551361
+ -0.9019978122219484```
 """
 struct Dense{F,S,T}
     omega_0::F
@@ -27,7 +27,7 @@ struct Dense{F,S,T}
 end
 
 function Dense(in::Integer, out::Integer;
-               omega_0 = 30, is_first = false, initb = zeros)
+               omega_0=30, is_first::Bool = false, initb = zeros)
   return Dense(omega_0, SIREN_init(omega_0, is_first, out, in), initb(out))
 end
 
@@ -44,7 +44,7 @@ function Base.show(io::IO, l::Dense)
   print(io, ")")
 end
 
-## FIGURE OUT WHAT THE FUCK THIS MEANS
+## FIGURE OUT WHAT THIS MEANS
 # Try to avoid hitting generic matmul in some simple cases
 # Base's matmul is so slow that it's worth the extra conversion to hit BLAS
 (a::Dense{<:Any,W})(x::AbstractArray{T}) where {T <: Union{Float32,Float64}, W <: AbstractArray{T}} =

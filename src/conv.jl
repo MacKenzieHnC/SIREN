@@ -9,10 +9,12 @@ _convtransoutdims(isize, ksize, ssize, dsize, pad) = (isize .- 1).*ssize .+ 1 .+
 expand(N, i::Tuple) = i
 expand(N, i::Integer) = ntuple(_ -> i, N)
 """
-    Conv(size, in => out, σ = identity; init = glorot_uniform,
-         stride = 1, pad = 0, dilation = 1)
+    Conv(size, in => out,
+        stride = 1, pad = 0, dilation = 1,
+        omega_0 = 30, is_first = false)
 
-Standard convolutional layer. `size` should be a tuple like `(2, 2)`.
+Convolutional layer with SIREN initialization and additional scaling factor omega_0.
+`size` should be a tuple like `(2, 2)`.
 `in` and `out` specify the number of input and output channels respectively.
 
 Data should be stored in WHCN order (width, height, # channels, batch size).
@@ -21,13 +23,13 @@ and a batch of 50 would be a `100×100×3×50` array.
 
 # Examples
 
-Apply a `Conv` layer to a 1-channel input using a 2×2 window size, giving us a
-16-channel output. Output is activated with ReLU.
+Apply a `SIREN.Conv` layer to a 1-channel input using a 2×2 window size, giving us a
+16-channel output.
 ```julia
 size = (2,2)
 in = 1
 out = 16
-Conv(size, in => out, relu)
+SIREN.Conv(size, in => out)
 ```
 """
 struct Conv{N,M,F,A,V}

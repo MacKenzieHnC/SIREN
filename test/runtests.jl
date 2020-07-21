@@ -22,7 +22,7 @@ function test_dense()
     b = uniform(fan_out)
     omega_0 = 30
 
-    d = SIREN.Dense(W, b, omega_0)
+    d = SIREN.Dense(omega_0, W, b)
 
     @test params(d)[1] == W
     @test params(d)[2] == b
@@ -37,13 +37,6 @@ end
 function test_CuArrays()
 
 end
-
-
-
-
-
-
-
 
 @testset "SIREN.jl" begin
     test_uniform()
