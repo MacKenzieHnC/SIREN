@@ -32,7 +32,7 @@ julia> SIREN_init(30,false,3,2)
 ```
 """
 function SIREN_init(omega_0::Real, is_first::Bool, dims::Integer...)
-    w = uniform(dims)
+    w = uniform(dims...)
 
     fan_in = 1
     s = size(w)

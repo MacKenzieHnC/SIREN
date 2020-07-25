@@ -31,7 +31,9 @@ function test_dense()
 end
 
 function test_conv()
-    SIREN.Conv((3,2), 4=>5)
+    m = SIREN.Conv((3,2), 4=>5)
+    d = rand(28,28,4,2)
+    m(d)
 end
 
 function test_CuArrays()
