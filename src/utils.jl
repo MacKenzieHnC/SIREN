@@ -12,7 +12,7 @@ julia> uniform(2, 3)
  0.822376   0.735768   0.0525029
 ```
 """
-uniform(dims...) = (rand(Float32, dims...) .- 0.5f0) * 2
+uniform(dims...) = (rand(dims...) .- 0.5f0) * 2
 
 """
     SIREN_init(SIREN_init(omega_0::Real, is_first::Bool, dims::Integer...)

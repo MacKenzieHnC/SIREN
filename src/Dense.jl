@@ -27,8 +27,8 @@ struct Dense{F,S,T}
 end
 
 function Dense(in::Integer, out::Integer;
-               omega_0=30, is_first::Bool = false, initb = zeros)
-  return Dense(omega_0, SIREN_init(omega_0, is_first, out, in), initb(out))
+               omega_0=30, is_first::Bool = false)
+  return Dense(omega_0, SIREN_init(omega_0, is_first, out, in), zeros(out))
 end
 
 Flux.@functor Dense
