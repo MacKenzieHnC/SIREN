@@ -65,7 +65,7 @@ function (c::Conv)(x::AbstractArray)
 end
 
 function Base.show(io::IO, l::Conv)
-  print(io, "Conv(", size(l.weight)[1:ndims(l.weight)-2])
+  print(io, "SIREN.Conv(", size(l.weight)[1:ndims(l.weight)-2])
   print(io, ", ", size(l.weight, ndims(l.weight)-1), "=>", size(l.weight, ndims(l.weight)))
   print(io, ", omega_0=", l.omega_0)
   print(io, ")")
